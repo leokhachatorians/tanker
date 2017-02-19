@@ -31,8 +31,59 @@ class Player {
     private:
         int m_health;
         int m_kills;
-        bool alive;
+        int m_row;
+        int m_col;
+        bool m_alive;
 };
+
+int Player::get_row() const {
+    return m_row;
+}
+
+int Player::get_col() const {
+    return m_col;
+}
+
+int Player::get_kills() const {
+    return m_kills;
+}
+
+int Player::get_health() const {
+    return m_health;
+}
+
+bool Player::is_alive() const {
+    return m_alive;;
+}
+
+void Player::add_kill(int amount) {
+    m_kills += amount;
+}
+
+void Player::reduce_health() {
+    m_health -= 1;
+    if (m_health == 0) {
+        m_alive = false;
+    }
+}
+
+void Player::move(Direction dir) {
+    if (dir == UP && m_row > 1) {
+        m_row -= 1;
+    }
+    else if (dir == DOWN && m_row < MAXROWS - 1) {
+        m_row += 1;
+    }
+    else if (dir == LEFT && m_col > 1) {
+        m_col -= 1;
+    }
+    else if (dir == RIGHT && m_col < MAXCOLS - 1) {
+        m_col += 1;
+    }
+}
+
+
+
 
 class Tank {
     Tank(int row, int col);
@@ -48,7 +99,6 @@ class Tank {
     private:
         int m_health;
         bool alive;
-
 };
 
 class Arena {
