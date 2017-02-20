@@ -1,5 +1,10 @@
+#include <stdio.h>
+#include <unistd.h>
 #include <string>
 #include <iostream>
+
+// linux terminal size thing
+#include <sys/ioctl.h>
 
 const int MAXTANKS = 5;
 const int MAXROWS = 30;
@@ -121,60 +126,78 @@ bool Tank::is_alive() const {
     return m_alive;
 }
 
-
-
 class Arena {
     public:
-        Arena(int nRows, int nCols);
-        ~Arena();
+        Arena(int nRows, int nCols, int num_tanks, Player *p);
+        //~Arena();
+        void move_player(Direction dir);
+        void display_game_board();
 
     private:
         Player *m_player;
         int m_nTanks;
         int m_rows;
         int m_cols;
+        char m_grid[MAXROWS][MAXCOLS];
         Tank *m_ranks[MAXTANKS];
 };
 
+Arena::Arena(int rows, int cols, int num_tanks, Player *p) {
+    m_rows = rows;
+    m_cols = cols;
+    m_nTanks = num_tanks;
+    m_player = p;
+
+    for (int r = 0; r < rows; r++) {
+        for (int c = 0; c < cols; c++) {
+            m_grid[r][c] = '.';
+        }
+    }
+    m_grid[p->get_row()][p->get_col()] = 'P';
+}
+
+void Arena::display_game_board() {
+    struct winsize w;
+    ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
+    for (int i = 0; i < w.ws_row - m_rows; i++) {
+        std::cout << std::endl;
+    }
+
+    for (int r = 0; r < m_rows; r++) {
+        for (int c = 0; c < m_cols; c++) {
+            std::cout << m_grid[r][c];
+        }
+        std::cout << std::endl;
+    }
+}
+
+void Arena::move_player(Direction dir) {
+    m_grid[m_player->get_row()][m_player->get_col()] = '.';
+    m_player->move(dir);
+    m_grid[m_player->get_row()][m_player->get_col()] = 'P';
+}
+
+//class Game {
+//    public:
+//        Game();
+//        void run();
+//};
+//
+//Game::Game() {
+//    for (int r = 0; r < MAXROWS; r++) {
+//        for (int c = 0; c < MAXCOLS; c++) {
+//            m_grid[r][c] = '.';
+//        }
+//    }
+
 
 int main(int, char *[]) {
-
-    char grid[MAXROWS][MAXCOLS];
     Player p = Player(0, 0);
+    Arena arena = Arena(30, 30, 10, &p);
 
-    for (int r = 0; r < MAXROWS; r++) {
-        for (int c = 0; c < MAXCOLS; c++) {
-            grid[r][c] = '.';
-        }
-    }
+    arena.display_game_board();
+    arena.move_player(RIGHT);
+    arena.display_game_board();
 
-    grid[p.get_row()][p.get_col()] = 'P';
-
-    for (int r = 0; r < MAXROWS; r++) {
-        for (int c = 0; c < MAXCOLS; c++) {
-            std::cout << grid[r][c];
-        }
-        std::cout << std::endl;
-    }
-
-    std::cout << std::endl;
-
-    p.move(LEFT);
-    p.move(RIGHT);
-    p.move(UP);
-
-    grid[p.get_row()][p.get_col()] = 'P';
-
-    for (int r = 0; r < MAXROWS; r++) {
-        for (int c = 0; c < MAXCOLS; c++) {
-            std::cout << grid[r][c];
-        }
-        std::cout << std::endl;
-    }
-
-    std::cout << std::endl;
-
-
-    
-
+    return 0;
 }
