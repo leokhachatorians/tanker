@@ -177,27 +177,41 @@ void Arena::move_player(Direction dir) {
     m_grid[m_player->get_row()][m_player->get_col()] = 'P';
 }
 
-//class Game {
-//    public:
-//        Game();
-//        void run();
-//};
-//
-//Game::Game() {
-//    for (int r = 0; r < MAXROWS; r++) {
-//        for (int c = 0; c < MAXCOLS; c++) {
-//            m_grid[r][c] = '.';
-//        }
-//    }
+class Game {
+    public:
+        Game(Player *p, Arena *a);
+        void run();
+    private:
+        Player *g_player;
+        Arena *g_arena;
+        bool g_running;
+        int count;
+};
+
+Game::Game(Player *p, Arena *a) {
+    g_player = p;
+    g_arena = a;
+    g_running = true;
+}
+
+void Game::run() {
+    count = 1;
+    while (g_running == true) {
+        g_arena->display_game_board();
+        count += 1;
+        if (count == 5) {
+            g_running = false;
+        }
+    }
+}
+    
 
 
 int main(int, char *[]) {
-    Player p = Player(0, 0);
-    Arena arena = Arena(30, 30, 10, &p);
-
-    arena.display_game_board();
-    arena.move_player(RIGHT);
-    arena.display_game_board();
+    Player player = Player(0, 0);
+    Arena arena = Arena(30, 30, 10, &player);
+    Game game = Game(&player, &arena);
+    game.run();
 
     return 0;
 }
