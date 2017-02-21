@@ -4,7 +4,6 @@
 #include <iostream>
 #include <stdlib.h>
 #include <time.h>
-//#include <pthread.h>
 #include <thread>
 
 // linux terminal size thing

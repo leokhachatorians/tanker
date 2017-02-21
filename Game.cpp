@@ -42,24 +42,64 @@ void Game::player_thread() {
             col -= 1;
             mvaddch(row, col, g_player->get_sym());
             refresh();
+            g_player->set_shooting_dir('l');
+            g_player->set_pos(row, col);
         }
         else if (ch == KEY_RIGHT && col < g_screen->width() - 2) {
             mvaddch(row, col, '.');
             col += 1;
             mvaddch(row, col, g_player->get_sym());
             refresh();
+            g_player->set_shooting_dir('r');
+            g_player->set_pos(row, col);
         }
         else if (ch == KEY_UP && row > 1) {
             mvaddch(row, col, '.');
             row -= 1;
             mvaddch(row, col, g_player->get_sym());
             refresh();
+            g_player->set_shooting_dir('u');
+            g_player->set_pos(row, col);
         }
         else if (ch == KEY_DOWN && row < g_screen->height() - 3) {
             mvaddch(row, col, '.');
             row += 1;
             mvaddch(row, col, g_player->get_sym());
             refresh();
+            g_player->set_shooting_dir('d');
+            g_player->set_pos(row, col);
+        }
+        else if (ch == ' ') {
+            char shooting_dir = g_player->get_shooting_dir();
+            int row = g_player->get_row();
+            int col = g_player->get_col();
+            switch (shooting_dir) {
+                case 'l':
+                    for (int i = 0; i < 10; i++) {
+                        mvaddch(row, col-i,'<');
+                        refresh();
+                    }
+                    break;
+                case 'r':
+                    for (int i = 0; i < 10; i++) {
+                        mvaddch(row, col+i, '>');
+                        refresh();
+                    }
+                    break;
+                case 'u':
+                    for (int i = 0; i < 10; i++) {
+                        mvaddch(row-i, col, '^');
+                        refresh();
+                    }
+                    break;
+                case 'd':
+                    for (int i = 0; i < 10; i++) {
+                        mvaddch(row+i, col, 'v');
+                        refresh();
+                    }
+                    break;
+                default: break;
+            }
         }
         else if (ch == 'q' || ch == 'Q') {
             g_running = false;

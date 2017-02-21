@@ -29,6 +29,10 @@ char Player::get_sym() const {
     return m_symbol;
 }
 
+char Player::get_shooting_dir() const {
+    return m_shooting_dir;
+}
+
 bool Player::is_alive() const {
     return m_alive;;
 }
@@ -42,4 +46,13 @@ void Player::take_damage() {
     if (m_health == 0) {
         m_alive = false;
     }
+}
+
+void Player::set_pos(int row, int col) {
+    m_row = row;
+    m_col = col;
+}
+
+void Player::set_shooting_dir(char dir) {
+    m_shooting_dir = dir;
 }

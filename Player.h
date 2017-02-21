@@ -10,10 +10,12 @@ class Player {
         int get_col() const;
         int get_kills() const;
         int get_health() const;
-        char get_sym() const;
 
-        void move(Direction);
-        void shoot(Direction);
+        char get_sym() const;
+        char get_shooting_dir() const;
+
+        void set_pos(int row, int col);
+        void set_shooting_dir(char);
         void add_kill(int kill);
         void take_damage();
 
@@ -22,6 +24,7 @@ class Player {
         int m_kills;
         int m_row;
         int m_col;
+        char m_shooting_dir;
         char m_symbol;
         bool m_alive;
 };
