@@ -56,3 +56,11 @@ void Player::set_pos(int row, int col) {
 void Player::set_shooting_dir(char dir) {
     m_shooting_dir = dir;
 }
+
+bool Player::is_shooting() const {
+    return m_shooting;
+}
+
+void Player::set_is_shooting() {
+    m_shooting = true;
+}

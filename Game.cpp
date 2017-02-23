@@ -69,43 +69,51 @@ void Game::player_thread() {
             g_player->set_shooting_dir('d');
             g_player->set_pos(row, col);
         }
-        else if (ch == ' ') {
-            char shooting_dir = g_player->get_shooting_dir();
-            int row = g_player->get_row();
-            int col = g_player->get_col();
-            switch (shooting_dir) {
-                case 'l':
-                    for (int i = 0; i < 10; i++) {
-                        mvaddch(row, col-i,'<');
-                        refresh();
-                    }
-                    break;
-                case 'r':
-                    for (int i = 0; i < 10; i++) {
-                        mvaddch(row, col+i, '>');
-                        refresh();
-                    }
-                    break;
-                case 'u':
-                    for (int i = 0; i < 10; i++) {
-                        mvaddch(row-i, col, '^');
-                        refresh();
-                    }
-                    break;
-                case 'd':
-                    for (int i = 0; i < 10; i++) {
-                        mvaddch(row+i, col, 'v');
-                        refresh();
-                    }
-                    break;
-                default: break;
-            }
+        else if (ch == ' ' && g_player->is_shooting() == false) {
+            g_player->set_is_shooting();
+            g_shot_active = true;
+            //std::thread s_thread(&Game::shooting_thread, this);
+            //g_threads.push_back(std::thread(&Game::shooting_thread, this));
         }
         else if (ch == 'q' || ch == 'Q') {
             g_running = false;
             break;
         }
     }
+}
+
+void Game::shooting_thread() {
+    char shooting_dir  = g_player->get_shooting_dir();
+    int row = g_player->get_row();
+    int col = g_player->get_col();
+    switch (shooting_dir) {
+        case 'l':
+            for (int i = 0; i < 10; i++) {
+                mvaddch(row, col-i,'<');
+                refresh();
+            }
+            break;
+        case 'r':
+            for (int i = 0; i < 10; i++) {
+                mvaddch(row, col+i, '>');
+                refresh();
+            }
+            break;
+        case 'u':
+            for (int i = 0; i < 10; i++) {
+                mvaddch(row-i, col, '^');
+                refresh();
+            }
+            break;
+        case 'd':
+            for (int i = 0; i < 10; i++) {
+                mvaddch(row+i, col, 'v');
+                refresh();
+            }
+            break;
+        default: break;
+    }
+    g_shot_active = false;
 }
 
 void Game::robo_thread() {
@@ -153,6 +161,27 @@ void Game::run() {
     std::thread p_thread(&Game::player_thread, this);
     std::thread r_thread(&Game::robo_thread, this);
 
+   // while (g_running) {
+   //     // check to see if theres a shooting thread
+   //     if (g_threads.size() > 0 && g_shot_active == false) {
+   //         join_thread(g_threads[0]);
+   //         g_threads.pop_back();
+   //     }
+   //     else {
+   //         usleep(100000);
+   //     }
+   // }
+
+
+
     r_thread.join();
     p_thread.join();
 }
+
+void Game::join_thread(std::thread &t) {
+    t.join();
+}
+
+//void Game::push_thread(std::thread &t) {
+//    g_threads.push_back(t);
+//}

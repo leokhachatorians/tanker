@@ -6,6 +6,7 @@ class Player {
         Player(int row, int col);
         //~Player();
         bool is_alive() const;
+        bool is_shooting() const;
         int get_row() const;
         int get_col() const;
         int get_kills() const;
@@ -16,6 +17,7 @@ class Player {
 
         void set_pos(int row, int col);
         void set_shooting_dir(char);
+        void set_is_shooting();
         void add_kill(int kill);
         void take_damage();
 
@@ -27,4 +29,5 @@ class Player {
         char m_shooting_dir;
         char m_symbol;
         bool m_alive;
+        bool m_shooting;
 };
