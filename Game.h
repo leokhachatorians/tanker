@@ -16,6 +16,7 @@ class Game {
         void push_thread(std::thread &t);
         void join_thread(std::thread &t);
         void shooting_thread();
+        void do_join(std::thread &t);
         int generate_random_pos();
     private:
         Player  *g_player;
