@@ -1,4 +1,6 @@
 #include "Player.h"
+#include <ncurses.h>
+#include <unistd.h>
 
 Player::Player(int row, int col) {
     m_health = 2;
@@ -61,6 +63,6 @@ bool Player::is_shooting() const {
     return m_shooting;
 }
 
-void Player::set_is_shooting() {
-    m_shooting = true;
+void Player::set_is_shooting(bool value) {
+    m_shooting = value;
 }

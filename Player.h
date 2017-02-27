@@ -17,7 +17,8 @@ class Player {
 
         void set_pos(int row, int col);
         void set_shooting_dir(char);
-        void set_is_shooting();
+        void shoot();
+        void set_is_shooting(bool value);
         void add_kill(int kill);
         void take_damage();
 
