@@ -17,7 +17,6 @@ class Player {
 
         void set_pos(int row, int col);
         void set_shooting_dir(char);
-        void shoot();
         void set_is_shooting(bool value);
         void add_kill(int kill);
         void take_damage();
@@ -31,4 +30,5 @@ class Player {
         char m_symbol;
         bool m_alive;
         bool m_shooting;
+        int m_shots;
 };

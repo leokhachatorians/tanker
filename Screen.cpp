@@ -18,6 +18,8 @@ Screen::Screen() {
     screen_height = w.ws_row;
     screen_width = w.ws_col;
 
+    mvprintw(w.ws_row - 2, 10, "hello");
+
 }
 
 Screen::~Screen() {

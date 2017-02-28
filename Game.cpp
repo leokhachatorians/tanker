@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <thread>
 #include <unistd.h>
+#include <sys/ioctl.h>
 
 Game::Game(Player *p, Screen *s, int num_tanks) {
     // Create game class, and place player character on screen
@@ -121,6 +122,7 @@ void Game::shooting_thread() {
         default: break;
     }
     g_player->set_is_shooting(false);
+    g_player->add_kill(1);
 }
 
 void Game::robo_thread() {
@@ -170,14 +172,10 @@ void Game::run() {
 
     while (g_running) {
         // check to see if theres a shooting thread
-       // if (g_threads.size() > 0 && g_player->is_shooting() == false) {
         if (g_threads.size() > 0) {
             g_threads[0].detach();
             g_threads.pop_back();
-           // if (g_threads[0].joinable()) {
-           //     join_thread(g_threads[0]);
-           //     g_threads.pop_back();
-           // }
+            draw_stats();
         }
         else {
             usleep(10000);
@@ -189,4 +187,10 @@ void Game::run() {
 
 void Game::join_thread(std::thread &t) {
     t.join();
+}
+
+void Game::draw_stats() {
+    struct winsize w;
+    ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
+    mvprintw(w.ws_row - 2, 10, "Shots: %d", g_player->get_kills());
 }
