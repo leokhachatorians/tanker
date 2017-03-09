@@ -163,7 +163,6 @@ void Game::robo_thread() {
 }
 
 void Game::run() {
-    // std::thread r_thread(&Game::robo_thread, this);
     // struct winsize w;
     // ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
     // printw("\nHeight: %d Width: %d", w.ws_row, w.ws_col);
