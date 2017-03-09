@@ -1,9 +1,6 @@
 #include "Screen.h"
 #include "Simplex.h"
 #include <stdio.h>
-#include <ncurses.h>
-#include <unistd.h>
-#include <sys/ioctl.h>
 
 Screen::Screen() {
 
@@ -13,15 +10,13 @@ Screen::Screen() {
     cbreak();
     keypad(stdscr, TRUE);
     curs_set(0);
-    // create and populate screen
-    struct winsize w;
+    getmaxyx(stdscr, _height, _width);
     double noise;
     double scale = 0.04;
     Simplex s = Simplex();
-    ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
 
-    for (int r = 1; r < w.ws_row - 2; r++) {
-        for (int c = 2; c < w.ws_col - 1; c++) {
+    for (int r = 1; r < _height - 2; r++) {
+        for (int c = 2; c < _width; c++) {
             noise = s.noise(r * scale, c * scale);
             if (noise < .3) {
                 mvaddch(r, c, '.');
@@ -37,11 +32,7 @@ Screen::Screen() {
             }
         }
     }
-
-    screen_height = w.ws_row;
-    screen_width = w.ws_col;
-
-    mvprintw(w.ws_row - 2, 10, "hello");
+    mvprintw(_height - 2, 10, "hello");
 
 }
 
@@ -54,9 +45,9 @@ void Screen::add_char(int row, int col, char x) {
 }
 
 int Screen::height() const {
-    return screen_height;
+    return _height;
 }
 
 int Screen::width() const {
-    return screen_width;
+    return _width;
 }

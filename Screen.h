@@ -1,3 +1,4 @@
+#include <ncurses.h>
 #pragma once
 
 class Screen {
@@ -8,8 +9,6 @@ class Screen {
         int height() const;
         int width() const;
     private:
-        int screen_height;
-        int screen_width;
-        int playable_width;
-        int playable_height;
+        int _height;
+        int _width;
 };
