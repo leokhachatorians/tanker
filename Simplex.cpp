@@ -1,5 +1,4 @@
 #include "Simplex.h"
-#include "Grad.h"
 
 Simplex::Simplex() {
     F2 = 0.366025403f;  // F2 = (sqrt(3) - 1) / 2
@@ -22,7 +21,7 @@ int Simplex::fast_floor(double x) {
     return x < xi ? xi-1 : xi;
 }
 
-double Simplex::noise(double xin, double yin) {
+double Simplex::simplex_noise(double xin, double yin) {
     double n0, n1, n2;
     int i1, j1;
 
@@ -83,4 +82,24 @@ double Simplex::noise(double xin, double yin) {
         n2 = t2 * t2 * dot(grad3[gi2], x2, y2);
     }
     return 45.23065f * (n0 + n1 + n2);
+}
+
+double Simplex::brownian(int iters, double x, double y, double pers, double scale, double low, double high) {
+    double max_amp = 0;
+    double amp = 1;
+    double freq = scale;
+    double noise = 0;
+
+    for (int i = 0; i < iters; ++i) {
+        noise += simplex_noise(x * freq, y * freq) * amp;
+        max_amp += amp;
+        amp *= pers;
+        freq *= 2;
+    }
+
+    noise /= max_amp;
+
+    noise = noise * (high - low) / 2 + (high + low) / 2;
+
+    return noise;
 }

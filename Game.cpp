@@ -3,7 +3,6 @@
 #include <stdlib.h>
 #include <thread>
 #include <unistd.h>
-#include <sys/ioctl.h>
 
 Game::Game(Player *p, Screen *s, int num_tanks) {
     // Create game class, and place player character on screen
@@ -46,7 +45,7 @@ void Game::player_thread() {
             g_player->set_shooting_dir('l');
             g_player->set_pos(row, col);
         }
-        else if (ch == KEY_RIGHT && col < g_screen->width() - 2) {
+        else if (ch == KEY_RIGHT && col < g_screen->width() - 1) {
             mvaddch(row, col, '.');
             col += 1;
             mvaddch(row, col, g_player->get_sym());
@@ -163,9 +162,6 @@ void Game::robo_thread() {
 }
 
 void Game::run() {
-    // struct winsize w;
-    // ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
-    // printw("\nHeight: %d Width: %d", w.ws_row, w.ws_col);
     std::thread p_thread(&Game::player_thread, this);
     //std::thread r_thread(&Game::robo_thread, this);
 
@@ -189,7 +185,5 @@ void Game::join_thread(std::thread &t) {
 }
 
 void Game::draw_stats() {
-    struct winsize w;
-    ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
-    mvprintw(w.ws_row - 2, 10, "Shots: %d", g_player->get_kills());
+    mvprintw(g_screen->height() - 2, 10, "Shots: %d", g_player->get_kills());
 }

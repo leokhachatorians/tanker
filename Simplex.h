@@ -1,4 +1,3 @@
-#include "Grad.h"
 #include <cmath>
 
 #ifndef SIMPLEX_H
@@ -33,8 +32,9 @@ class Simplex {
 
     public:
         Simplex();
-        double noise(double xin, double yin);
+        double simplex_noise(double xin, double yin);
         double dot(int g[], double x, double y);
+        double brownian(int iters, double x, double y, double pers, double scale, double low, double high);
         int fast_floor(double x);
 };
 
