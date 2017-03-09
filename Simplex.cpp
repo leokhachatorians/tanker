@@ -17,13 +17,6 @@ double Simplex::dot(int g[], double x, double y) {
     return x_value + y_value;
 }
 
-static float grad(int hash, float x, float y) {
-    int h = hash & 0x3F;  // Convert low 3 bits of hash code
-    float u = h < 4 ? x : y;  // into 8 simple gradient directions,
-    float v = h < 4 ? y : x;  // and compute the dot product with (x,y).
-    return ((h & 1) ? -u : u) + ((h & 2) ? -2.0f*v : 2.0f*v);
-}
-
 int Simplex::fast_floor(double x) {
     int xi = (int) x;
     return x < xi ? xi-1 : xi;

@@ -12,7 +12,7 @@ Game::Game(Player *p, Screen *s, int num_tanks) {
     m_num_tanks = num_tanks;
     g_running = true;
     mvaddch(p->get_row(), p->get_col(), p->get_sym());
-    init_robo_tanks();
+    //init_robo_tanks();
 }
 
 int Game::generate_random_pos() {
@@ -167,7 +167,7 @@ void Game::run() {
     // ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
     // printw("\nHeight: %d Width: %d", w.ws_row, w.ws_col);
     std::thread p_thread(&Game::player_thread, this);
-    std::thread r_thread(&Game::robo_thread, this);
+    //std::thread r_thread(&Game::robo_thread, this);
 
     while (g_running) {
         // check to see if theres a shooting thread
@@ -180,7 +180,7 @@ void Game::run() {
             usleep(10000);
         }
     }
-    join_thread(r_thread);
+    //join_thread(r_thread);
     join_thread(p_thread);
 }
 

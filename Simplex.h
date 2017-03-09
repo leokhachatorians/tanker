@@ -28,13 +28,8 @@ class Simplex {
 
         short perm[512];
         short permMod12[512];
-
         double F2;
         double G2;
-        double F3;
-        double G3;
-        double F4;
-        double G4; 
 
     public:
         Simplex();

@@ -6,10 +6,17 @@
 #include <sys/ioctl.h>
 
 Screen::Screen() {
+
+    initscr();
+    clear();
+    noecho();
+    cbreak();
+    keypad(stdscr, TRUE);
+    curs_set(0);
     // create and populate screen
     struct winsize w;
     double noise;
-    double scale = 0.05;
+    double scale = 0.04;
     Simplex s = Simplex();
     ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
 
