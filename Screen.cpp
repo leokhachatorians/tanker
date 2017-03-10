@@ -58,8 +58,8 @@ void Screen::add_char(int row, int col, char x) {
 }
 
 bool Screen::check_movement(int row, int col) {
-    char check = mvwinch(_window, row, col);
-    mvprintw(_height - 2, 10, "<R> Redraws map");
+    char check = mvinch(row, col) & A_CHARTEXT;
+    mvprintw(_height - 3, 10, "<R> Redraws map");
     if (check == '.') {
         return true;
     }

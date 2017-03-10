@@ -37,7 +37,7 @@ void Game::player_thread() {
 
     for(;;) {
         ch = getch();
-        if (ch == KEY_LEFT && col > 2) {
+        if (ch == KEY_LEFT && col > 2 && g_screen->check_movement(row, col - 1)) {
             mvaddch(row, col, '.');
             col -= 1;
             mvaddch(row, col, g_player->get_sym());
@@ -45,7 +45,7 @@ void Game::player_thread() {
             g_player->set_shooting_dir('l');
             g_player->set_pos(row, col);
         }
-        else if (ch == KEY_RIGHT && col < g_screen->width() - 1) {
+        else if (ch == KEY_RIGHT && col < g_screen->width() - 1 && g_screen->check_movement(row, col + 1)) {
             mvaddch(row, col, '.');
             col += 1;
             mvaddch(row, col, g_player->get_sym());
@@ -53,7 +53,7 @@ void Game::player_thread() {
             g_player->set_shooting_dir('r');
             g_player->set_pos(row, col);
         }
-        else if (ch == KEY_UP && row > 1) {
+        else if (ch == KEY_UP && row > 1 && g_screen->check_movement(row - 1, col)) {
             mvaddch(row, col, '.');
             row -= 1;
             mvaddch(row, col, g_player->get_sym());
@@ -61,7 +61,7 @@ void Game::player_thread() {
             g_player->set_shooting_dir('u');
             g_player->set_pos(row, col);
         }
-        else if (ch == KEY_DOWN && row < g_screen->height() - 3) {
+        else if (ch == KEY_DOWN && row < g_screen->height() - 3 && g_screen->check_movement(row + 1, col)) {
             mvaddch(row, col, '.');
             row += 1;
             mvaddch(row, col, g_player->get_sym());
