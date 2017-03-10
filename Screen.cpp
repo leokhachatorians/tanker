@@ -6,7 +6,6 @@
 #include <cstdlib>
 
 Screen::Screen() {
-
     initscr();
     clear();
     noecho();
@@ -14,8 +13,17 @@ Screen::Screen() {
     keypad(stdscr, TRUE);
     curs_set(0);
     getmaxyx(stdscr, _height, _width);
+    _window = newwin(_height, _width, _height, _width);
+    draw_world();
+}
+
+Screen::~Screen() {
+    endwin();
+}
+
+void Screen::draw_world() {
     double noise;
-    double scale = 0.01;
+    double scale = 0.03;
     Simplex s = Simplex();
     std::srand(std::time(0));
     int ra = 1 + (std::rand() % (int)(5000));
@@ -41,17 +49,21 @@ Screen::Screen() {
             }
         }
     }
+    mvprintw(_height - 2, 10, "<R> Redraws map");
 
-    mvprintw(_height - 2, 10, "hello");
-
-}
-
-Screen::~Screen() {
-    endwin();
 }
 
 void Screen::add_char(int row, int col, char x) {
     mvaddch(row, col, x);
+}
+
+bool Screen::check_movement(int row, int col) {
+    char check = mvwinch(_window, row, col);
+    mvprintw(_height - 2, 10, "<R> Redraws map");
+    if (check == '.') {
+        return true;
+    }
+    return false;
 }
 
 int Screen::height() const {

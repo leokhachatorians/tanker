@@ -74,6 +74,9 @@ void Game::player_thread() {
             g_player->set_is_shooting(true);
             g_threads.push_back(std::thread(&Game::shooting_thread, this));
         }
+        else if (ch == 'R') {
+            g_screen->draw_world();
+        }
         else if (ch == 'q' || ch == 'Q') {
             g_running = false;
             break;
@@ -162,6 +165,7 @@ void Game::robo_thread() {
 }
 
 void Game::run() {
+    //g_screen->draw_world();
     std::thread p_thread(&Game::player_thread, this);
     //std::thread r_thread(&Game::robo_thread, this);
 
