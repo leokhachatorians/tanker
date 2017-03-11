@@ -13,7 +13,9 @@ Screen::Screen() {
     keypad(stdscr, TRUE);
     curs_set(0);
     getmaxyx(stdscr, _height, _width);
-    _window = newwin(_height, _width, _height, _width);
+    _iterations = 16;
+    _scale = 0.01;
+    _persistence = 0.5;
     draw_world();
 }
 
@@ -23,7 +25,6 @@ Screen::~Screen() {
 
 void Screen::draw_world() {
     double noise;
-    double scale = 0.03;
     Simplex s = Simplex();
     std::srand(std::time(0));
     int ra = 1 + (std::rand() % (int)(5000));
@@ -31,7 +32,7 @@ void Screen::draw_world() {
     for (int r = 1; r < _height - 2; r++) {
         for (int c = 2; c < _width; c++) {
             //noise = s.simplex_noise((r + ra) * scale, (c + ra) * scale);
-            noise = s.brownian(16, r+ra, c+ra, .5, scale, 0, 255);
+            noise = s.brownian(_iterations, r+ra, c+ra, _persistence, _scale, 0, 255);
             if (noise < 93) {
                 mvaddch(r, c, '~');
             }
@@ -49,7 +50,7 @@ void Screen::draw_world() {
             }
         }
     }
-    mvprintw(_height - 2, 10, "<R> Redraws map");
+    mvprintw(_height - 2, 10, "<R> Redraws map\t<+/-> Adjust Scale\t<Q> To Quit");
 
 }
 
@@ -59,7 +60,6 @@ void Screen::add_char(int row, int col, char x) {
 
 bool Screen::check_movement(int row, int col) {
     char check = mvinch(row, col) & A_CHARTEXT;
-    mvprintw(_height - 3, 10, "<R> Redraws map");
     if (check == '.') {
         return true;
     }
@@ -72,4 +72,31 @@ int Screen::height() const {
 
 int Screen::width() const {
     return _width;
+}
+
+void Screen::adjust_scale(char action, double value) {
+    if (action == 'i') {
+        _scale += value;
+    }
+    else {
+        _scale -= value;
+    }
+}
+
+void Screen::adjust_persistence(char action, double value) {
+    if (action == 'i') {
+        _persistence += value;
+    }
+    else {
+        _persistence -= value;
+    }
+}
+
+void Screen::adjust_iterations(char action, int value) {
+    if (action == 'i') {
+        _iterations += value;
+    }
+    else {
+        _iterations -= value;
+    }
 }

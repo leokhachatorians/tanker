@@ -77,6 +77,14 @@ void Game::player_thread() {
         else if (ch == 'R') {
             g_screen->draw_world();
         }
+        else if (ch == '+') {
+            g_screen->adjust_scale('i', 0.02);
+            g_screen->draw_world();
+        }
+        else if (ch == '-') {
+            g_screen->adjust_scale('d', 0.02);
+            g_screen->draw_world();
+        }
         else if (ch == 'q' || ch == 'Q') {
             g_running = false;
             break;
